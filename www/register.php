@@ -94,21 +94,30 @@
 		<?php if (USE_CAPTCHA) echo '<script src="https://www.google.com/recaptcha/api.js"></script>' ?>
 	</head>
 	<body>
-		<form id="frmRegister" method="POST">
-			<div>
-				<label>Username:</label>
-				<input type="text" id="txtUser" name="txtUser"/>
-			</div>
-			<div>
-				<label>Password:</label>
-				<input type="password" id="txtPass" name="txtPass"/>
-			</div>
-			<div>
-				<label>Confirm Password:</label>
-				<input type="password" id="txtPassConfirm" name="txtPassConfirm"/>
-			</div>
-			<?php if (USE_CAPTCHA) echo '<div class="g-recaptcha" data-sitekey="6Lf6yW8UAAAAAGWoH6M3wxyiPCuBMZXnLNbCcBGj"></div>' ?>
-			<button type="submit">Register</button>
-		</form>
+		<section class="wrap">
+			<h1>Register</h1>
+			<form id="frmRegister" ref="form" method="POST" v-on:submit="handler_frmRegister_submit">
+				<div class="input-wrap">
+					<label for="txtUser">Username:</label>
+					<input type="text" id="txtUser" name="txtUser" v-model="model.user" required minlength="6" maxlength="16" pattern="[\w]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
+					<span class="error">Please enter a valid username between 6 and 16 characters</span>
+				</div>
+				<div class="input-wrap">
+					<label for="txtPass">Password:</label>
+					<input type="password" id="txtPass" name="txtPass" v-model="model.pass" required minlength="7" maxlength="32" pattern="[\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\\s]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-on:input="handler_pass_input" v-bind:disabled="submitted"/>
+					<span class="error">Please enter a valid password between 7 and 32 characters</span>
+				</div>
+				<div class="input-wrap">
+					<label for="txtPassConfirm">Confirm Password:</label>
+					<input type="password" id="txtPassConfirm" name="txtPassConfirm" ref="txtPassConfirm" v-model="model.passConfirm" required minlength="7" maxlength="32" pattern="[\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\\s]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-on:input="handler_pass_input" v-bind:disabled="submitted"/>
+					<span class="error">Please enter a valid password between 7 and 32 characters</span>
+				</div>
+				<?php if (USE_CAPTCHA) echo '<div class="g-recaptcha" data-sitekey="6Lf6yW8UAAAAAGWoH6M3wxyiPCuBMZXnLNbCcBGj" data-theme="dark"></div>' ?>
+				<button type="submit" v-bind:disabled="submitted">Register</button>
+			</form>
+		</section>
+		
+		<script src="js/_lib/vue.min.js"></script>
+		<script src="js/register.js"></script>
 	</body>
 </html>
