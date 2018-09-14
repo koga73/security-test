@@ -17,12 +17,12 @@ button {
 	text-transform:uppercase;
 	color:$color-white;
 	cursor:pointer;
-	margin:32px 0;
 	font-weight:bold;
+	margin-top:24px;
 
 	&:hover {
-		border-color:$color-magenta;
-		color:$color-magenta;
+		border-color:$color-green;
+		color:$color-green;
 	}
 
 	&[disabled]{
@@ -30,6 +30,10 @@ button {
 		color:$color-gray;
 		background-color:$color-charcoal;
 		cursor:default;
+	}
+
+	@media(max-width:375px){
+		margin-top:0;
 	}
 }
 
@@ -41,7 +45,7 @@ label {
 }
 
 .input-wrap {
-	margin:24px 0;
+	margin-bottom:24px;
 
 	input[type=text], input[type=password]{
 		background-color:$color-charcoal;
@@ -50,6 +54,7 @@ label {
 		padding:12px;
 		color:$color-white;
 		min-width:300px;
+		width:300px;
 
 		@media(max-width:375px){
 			width:100%;
@@ -58,8 +63,6 @@ label {
 		//Validation
 		&.error:not(:valid) {
 			border:1px solid $color-red;
-			background-color:$color-pink;
-			color:$color-black;
 	
 			& ~ .error {
 				display:block;
@@ -72,10 +75,16 @@ label {
 			background-color:$color-charcoal;
 		}
 	}
+}
 
-	span.error {
-		display:none;
-		color:$color-red;
+span.error {
+	width:300px;
+	display:none;
+	color:$color-red;
+	margin-top:4px;
+
+	&.server-error {
+		display:block;
 	}
 }
 
@@ -87,5 +96,32 @@ label {
 	@media(max-width:375px){
 		padding:0 24px;
 		margin:24px 0;
+	}
+}
+
+form {
+	display:inline-block;
+	border:1px solid $color-magenta;
+	box-sizing:border-box;
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%, -50%);
+	padding:48px;
+
+	h1 {
+		position:absolute;
+		top:-16px;
+
+		span {
+			background-color:$color-black;
+		}
+	}
+
+	@media(max-width:375px){
+		padding:24px;
+		margin-top:24px;
+		top:0;
+		transform:translate(-50%, 0);
 	}
 }

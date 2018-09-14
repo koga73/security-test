@@ -12,6 +12,12 @@
 			}
 		},
 
+		computed:{
+			incomplete:function(){
+				return !(this.model.user.length && this.model.pass.length && this.model.passConfirm.length);
+			}
+		},
+
 		methods:{
 			//Add error class if input is invalid
             handler_input_invalid:function(evt){
