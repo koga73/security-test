@@ -1,37 +1,29 @@
 <?php
-	define("DB_ADDRESS", "127.0.0.1");
-	define("DB_USER", "root");
-	define("DB_PASS", "");
-	define("DB_NAME", "security_test");
-	
-	function process($recaptcha){
+	require_once "../src/db.php";
+
+	function process(){
 		$txtUser = (isset($_POST["txtUser"])) ? $_POST["txtUser"] : null;
 		if (!$txtUser){
-			return "txtUser required";
+			throw new Exception("txtUser required");
 		}
-		if (!preg_match("/^\\w{6,16}$/", $txtUser)){
-			return "txtUser invalid";
-		}
-
 		$txtPass = (isset($_POST["txtPass"])) ? $_POST["txtPass"] : null;
 		if (!$txtPass){
-			return "txtPass required";
-		}
-		if (!preg_match("/^[\\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\\s]{7,32}$/", $txtPass)){
-			return "txtPass invalid";
+			throw new Exception("txtPass required");
 		}
 
-		//Success
-		return 0;
+		$user = (new DB())->login($txtUser, $txtPass);
+
+		//TODO: Session!
 	}
 
 	$error = null;
 	if (!empty($_POST)){
-		$error = process();
-		if (!$error){
-			//Redirect
+		try {
+			process();
 			header("Location: chat.php");
 			exit();
+		} catch (Exception $ex){
+			$error = $ex->getMessage();
 		}
 	}
 ?>
@@ -46,9 +38,8 @@
 		<link rel="stylesheet" href="css/styles.css" type="text/css"/>
 	</head>
 	<body>
-	<body>
 		<section>
-			<form id="frmLogin" ref="form" method="POST" v-on:submit="handler_frmLogin_submit" v-cloak>
+			<form id="frmLogin" ref="form" method="POST" v-on:submit="handler_form_submit" v-cloak>
 				<h1><span>Login</span></h1>
 				<div class="input-wrap">
 					<label for="txtUser">Username:</label>
@@ -57,7 +48,7 @@
 				</div>
 				<div class="input-wrap">
 					<label for="txtPass">Password:</label>
-					<input type="password" id="txtPass" name="txtPass" v-model="model.pass" required minlength="7" maxlength="32" pattern="[\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\\s]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-on:input="handler_pass_input" v-bind:disabled="submitted"/>
+					<input type="password" id="txtPass" name="txtPass" v-model="model.pass" required minlength="7" maxlength="32" pattern="[\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\\s]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
 					<span class="error">Must be from 7 to 32 characters</span>
 				</div>
 				<button type="submit" v-bind:disabled="submitted || incomplete">Login</button>
@@ -65,9 +56,13 @@
 					<span class="error server-error"><?php echo $error ?></span>
 				<?php endif; ?>
 			</form>
+			<a href="Register.php">Don't have a login? Register here</a>
 		</section>
+		<canvas id="fusionCanvas"></canvas>
 		
 		<script src="js/_lib/vue.min.js"></script>
+		<script src="js/_lib/GFXRenderer.min.js"></script>
+		<script src="js/FusionRenderer.js"></script>
 		<script src="js/login.js"></script>
 	</body>
 </html>

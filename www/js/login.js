@@ -1,20 +1,19 @@
 (function(){
 	new Vue({
-		el:"#frmRegister",
+		el:"#frmLogin",
 
 		data:{
 			submitted:false,
 
 			model:{
 				user:"",
-				pass:"",
-				passConfirm:""
+				pass:""
 			}
 		},
 
 		computed:{
 			incomplete:function(){
-				return !(this.model.user.length && this.model.pass.length && this.model.passConfirm.length);
+				return !(this.model.user.length && this.model.pass.length);
 			}
 		},
 
@@ -32,17 +31,6 @@
                         evt.target.classList.remove("error");
                     }
                 }
-			},
-
-			handler_pass_input:function(evt){
-				if (!this.model.passConfirm.length){
-					return;
-				}
-				if (this.model.pass !== this.model.passConfirm){
-					txtPassConfirm.setCustomValidity("Passwords do not match");
-				} else {
-					txtPassConfirm.setCustomValidity("");
-				}
 			},
 			
 			handler_form_submit:function(evt){

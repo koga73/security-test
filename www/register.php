@@ -1,10 +1,8 @@
 <?php
-	define("USE_CAPTCHA", true);
-	define("DB_ADDRESS", "127.0.0.1");
-	define("DB_USER", "root");
-	define("DB_PASS", "");
-	define("DB_NAME", "security_test");
-	define("RECAPTCHA_SECRET", "6Lf6yW8UAAAAAD1EWi-l4utA6jyV7Rlr5Gc2WJ37");
+	require_once "../src/db.php";
+
+	const USE_CAPTCHA = false;
+	const RECAPTCHA_SECRET = "6Lf6yW8UAAAAAD1EWi-l4utA6jyV7Rlr5Gc2WJ37";
 	
 	require_once "../recaptcha-master/src/autoload.php";
 	$recaptcha = new \ReCaptcha\ReCaptcha(RECAPTCHA_SECRET);
@@ -12,57 +10,25 @@
 	function process($recaptcha){
 		$txtUser = (isset($_POST["txtUser"])) ? $_POST["txtUser"] : null;
 		if (!$txtUser){
-			return "txtUser required";
+			throw new Exception("txtUser required");
 		}
-		if (!preg_match("/^\\w{6,16}$/", $txtUser)){
-			return "txtUser invalid";
-		}
-
 		$txtPass = (isset($_POST["txtPass"])) ? $_POST["txtPass"] : null;
 		if (!$txtPass){
-			return "txtPass required";
-		}
-		if (!preg_match("/^[\\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\\s]{7,32}$/", $txtPass)){
-			return "txtPass invalid";
+			throw new Exception("txtPass required");
 		}
 
 		$gRecaptchaResponse = (isset($_POST["g-recaptcha-response"])) ? $_POST["g-recaptcha-response"] : null;
 		if (USE_CAPTCHA && !$gRecaptchaResponse){
-			return "reCAPTCHA required";
+			throw new Exception("reCAPTCHA required");
 		}
 		if (USE_CAPTCHA){
 			$recaptchaResp = $recaptcha->setExpectedHostname("localhost")->verify($gRecaptchaResponse, getUserIP());
 			if (!$recaptchaResp->isSuccess()){
-				return "reCAPTCHA invalid"; // . " " . $recaptchaResp->getErrorCodes();
+				throw new Exception("reCAPTCHA invalid"); // . " " . $recaptchaResp->getErrorCodes();
 			}
 		}
 
-		//DB Connection
-		$conn = new mysqli(DB_ADDRESS, DB_USER, DB_PASS, DB_NAME);
-		$connError = mysqli_connect_error();
-		if ($connError){
-			return "Database connection failed"; // . " " . $connError);
-		}
-		
-		//Parameterized SQL to secure against SQLi
-		$stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-		if (!$stmt){
-			return "Statement invalid";
-		}
-		$stmt->bind_param("ss", $username, $password);
-
-		//Insert user
-		$username = $txtUser;
-		//Vulnerability: Password hashed using outdated SHA1 and not salted!
-		//Fix: Use bcrypt hashing and salt with username + constant
-		$password = sha1($txtPass);
-		$stmt->execute();
-		$stmt->close();
-
-		$conn->close();
-
-		//Success
-		return 0;
+		(new DB())->insertUser($txtUser, $txtPass);
 	}
 
 	function getUserIP() {
@@ -88,11 +54,12 @@
 
 	$error = null;
 	if (!empty($_POST)){
-		$error = process($recaptcha);
-		if (!$error){
-			//Redirect
+		try {
+			process($recaptcha);
 			header("Location: login.php");
 			exit();
+		} catch (Exception $ex){
+			$error = $ex->getMessage();
 		}
 	}
 ?>
@@ -110,7 +77,7 @@
 	</head>
 	<body>
 		<section>
-			<form id="frmRegister" ref="form" method="POST" v-on:submit="handler_frmRegister_submit" v-cloak>
+			<form id="frmRegister" ref="form" method="POST" v-on:submit="handler_form_submit" v-cloak>
 				<h1><span>Register</span></h1>
 				<div class="input-wrap">
 					<label for="txtUser">Username:</label>
@@ -138,8 +105,11 @@
 				<?php endif; ?>
 			</form>
 		</section>
+		<canvas id="fusionCanvas"></canvas>
 		
 		<script src="js/_lib/vue.min.js"></script>
+		<script src="js/_lib/GFXRenderer.min.js"></script>
+		<script src="js/FusionRenderer.js"></script>
 		<script src="js/register.js"></script>
 	</body>
 </html>
