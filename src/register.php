@@ -1,10 +1,10 @@
 <?php
 	require_once "include/db.php";
 
-	const USE_CAPTCHA = false;
+	const USE_CAPTCHA = true;
 	const RECAPTCHA_SECRET = "6Lf6yW8UAAAAAD1EWi-l4utA6jyV7Rlr5Gc2WJ37";
 	
-	require_once "../recaptcha-master/src/autoload.php";
+	require_once "include/recaptcha/autoload.php";
 	$recaptcha = new \ReCaptcha\ReCaptcha(RECAPTCHA_SECRET);
 
 	function process($recaptcha){

@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/koga73/security-test#readme",
   "dependencies": {
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-preprocess": "^3.0.1",
-    "gulp-sass": "^4.0.1"
+    "gulp-sass": "^4.0.1",
+    "run-sequence": "^2.2.1"
   }
 }
