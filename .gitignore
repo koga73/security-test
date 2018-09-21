@@ -61,4 +61,4 @@ typings/
 .next
 
 # Custom
-www/**/*.php
+www/
