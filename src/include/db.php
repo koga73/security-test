@@ -1,5 +1,5 @@
 <?php
-	require_once "../src/models/user.php";
+	require_once "./models/user.php";
 
 	class DB {
 		private static $DB_ADDRESS = "127.0.0.1";

@@ -1,5 +1,6 @@
 const gulp = require("gulp");
 const sass = require("gulp-sass");
+const preprocess = require("gulp-preprocess");
 
 const src = "src/";
 const dst = "www/";
@@ -32,4 +33,15 @@ gulp.task("watch", function(){
 
 gulp.task("build", function(){
 	return copy(phpSrc, dst);
+});
+
+gulp.task("php", function(){
+	return gulp
+		.src(phpSrc)
+		.pipe(preprocess({
+			context:{
+				INSECURE:false
+			}
+		}))
+		.pipe(gulp.dest(dst));
 });

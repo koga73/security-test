@@ -1,5 +1,5 @@
 <?php
-	require_once "../src/db.php";
+	require_once "./include/db.php";
 
 	function process(){
 		$txtUser = (isset($_POST["txtUser"])) ? $_POST["txtUser"] : null;

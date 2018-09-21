@@ -1,5 +1,5 @@
 <?php
-	require_once "../src/db.php";
+	require_once "./include/db.php";
 
 	const USE_CAPTCHA = false;
 	const RECAPTCHA_SECRET = "6Lf6yW8UAAAAAD1EWi-l4utA6jyV7Rlr5Gc2WJ37";
