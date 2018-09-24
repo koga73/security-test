@@ -1,14 +1,15 @@
+<?php
+	require_once "include/models/session.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>404</title>
+		<title>Page Not Found</title>
 		
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width,initial-scale=1"/>
-		
-		<link rel="stylesheet" href="css/styles.css" type="text/css"/>
+		<?php include "partials/_head.php"; ?>
 	</head>
 	<body>
+		<?php include "partials/_header.php"; ?>
 		<h1>Page not found!</h1>
 	</body>
 </html>

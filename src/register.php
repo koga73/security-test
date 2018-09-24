@@ -1,4 +1,5 @@
 <?php
+	require_once "include/models/session.php";
 	require_once "include/db.php";
 
 	const USE_CAPTCHA = true;
@@ -7,7 +8,7 @@
 	require_once "include/recaptcha/autoload.php";
 	$recaptcha = new \ReCaptcha\ReCaptcha(RECAPTCHA_SECRET);
 
-	function process($recaptcha){
+	function register($recaptcha){
 		$txtUser = (isset($_POST["txtUser"])) ? $_POST["txtUser"] : null;
 		if (!$txtUser){
 			throw new Exception("txtUser required");
@@ -55,7 +56,7 @@
 	$error = null;
 	if (!empty($_POST)){
 		try {
-			process($recaptcha);
+			register($recaptcha);
 			header("Location: login.php");
 			exit();
 		} catch (Exception $ex){
@@ -68,20 +69,18 @@
 	<head>
 		<title>Register</title>
 		
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width,initial-scale=1"/>
+		<?php include "partials/_head.php"; ?>
 		
-		<link rel="stylesheet" href="css/styles.css" type="text/css"/>
-
 		<?php if (USE_CAPTCHA) echo '<script src="https://www.google.com/recaptcha/api.js"></script>' ?>
 	</head>
 	<body>
+		<?php include "partials/_header.php"; ?>
 		<section>
 			<form id="frmRegister" ref="form" method="POST" v-on:submit="handler_form_submit" v-cloak>
 				<h1><span>Register</span></h1>
 				<div class="input-wrap">
 					<label for="txtUser">Username:</label>
-					<input type="text" id="txtUser" name="txtUser" v-model="model.user" required minlength="6" maxlength="16" pattern="[\w]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
+					<input type="text" id="txtUser" name="txtUser" ref="txtUser" v-model="model.user" required minlength="6" maxlength="16" pattern="[\w]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
 					<span class="error">Must be from 6 to 16 characters</span>
 				</div>
 				<div class="input-wrap">

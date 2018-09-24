@@ -1,23 +1,15 @@
+<?php
+	require_once "include/models/session.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>Rules</title>
 		
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width,initial-scale=1"/>
-		
-		<link rel="stylesheet" href="css/styles.css" type="text/css"/>
+		<?php include "partials/_head.php"; ?>
 	</head>
 	<body>
-		<header>
-			<nav>
-				<ul>
-					<li><a href="chat.php">Chat</a></li>
-					<li><a href="login.php">Login</a></li>
-					<li><a href="register.php">Register</a></li>
-				</ul>
-			</nav>
-		</header>
+		<?php include "partials/_header.php"; ?>
 		<section>
 			<h1>Rules</h1>
 			<ol>

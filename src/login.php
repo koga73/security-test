@@ -1,7 +1,15 @@
 <?php
+	require_once "include/models/session.php";
 	require_once "include/db.php";
 
-	function process(){
+	const LOGIN_REDIRECT = "chat.php";
+
+	if (Session::isLoggedIn()){
+		header("Location: " . LOGIN_REDIRECT);
+		exit();
+	}
+
+	function login(){
 		$txtUser = (isset($_POST["txtUser"])) ? $_POST["txtUser"] : null;
 		if (!$txtUser){
 			throw new Exception("txtUser required");
@@ -13,14 +21,14 @@
 
 		$user = (new DB())->login($txtUser, $txtPass);
 
-		//TODO: Session!
+		Session::login($user);
 	}
 
 	$error = null;
 	if (!empty($_POST)){
 		try {
-			process();
-			header("Location: chat.php");
+			login();
+			header("Location: " . LOGIN_REDIRECT);
 			exit();
 		} catch (Exception $ex){
 			$error = $ex->getMessage();
@@ -32,18 +40,16 @@
 	<head>
 		<title>Login</title>
 		
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width,initial-scale=1"/>
-		
-		<link rel="stylesheet" href="css/styles.css" type="text/css"/>
+		<?php include "partials/_head.php"; ?>
 	</head>
 	<body>
+		<?php include "partials/_header.php"; ?>
 		<section>
 			<form id="frmLogin" ref="form" method="POST" v-on:submit="handler_form_submit" v-cloak>
 				<h1><span>Login</span></h1>
 				<div class="input-wrap">
 					<label for="txtUser">Username:</label>
-					<input type="text" id="txtUser" name="txtUser" v-model="model.user" required minlength="6" maxlength="16" pattern="[\w]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
+					<input type="text" id="txtUser" name="txtUser" ref="txtUser" v-model="model.user" required minlength="6" maxlength="16" pattern="[\w]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
 					<span class="error">Must be from 6 to 16 characters</span>
 				</div>
 				<div class="input-wrap">
@@ -56,7 +62,6 @@
 					<span class="error server-error"><?php echo $error ?></span>
 				<?php endif; ?>
 			</form>
-			<a href="Register.php">Don't have a login? Register here</a>
 		</section>
 		<canvas id="fusionCanvas"></canvas>
 		

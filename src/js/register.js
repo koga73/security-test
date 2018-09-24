@@ -18,6 +18,10 @@
 			}
 		},
 
+		mounted:function(){
+			this.$refs.txtUser.focus();
+		},
+
 		methods:{
 			//Add error class if input is invalid
             handler_input_invalid:function(evt){
