@@ -4,7 +4,7 @@ body {
 	font-family:arial, sans-serif;
 }
 
-h1 {
+h1, h2, h3 {
 	font-size:2em;
 	text-transform:uppercase;
 	font-weight:bold;
@@ -37,6 +37,39 @@ button {
 	}
 }
 
+ul, ol {
+	list-style:square outside;
+	
+	& > li {
+		margin:8px 0 8px 32px;
+	}
+}
+
+p {
+	margin-bottom:16px;
+	line-height:1.25em;
+}
+
+a {
+	color:$color-blue;
+	text-decoration:none;
+	text-transform:uppercase;
+	border-bottom:1px solid transparent;
+	display:inline-block;
+	box-sizing:border-box;
+	padding:4px 8px;
+	margin:12px 8px;
+
+	&:hover {
+		color:$color-yellow;
+		border-bottom:1px solid $color-red;
+	}
+
+	@media(max-width:375px){
+		margin:8px 4px;
+	}
+}
+
 label {
 	display:block;
 	cursor:pointer;
@@ -53,12 +86,7 @@ label {
 		box-sizing:border-box;
 		padding:12px;
 		color:$color-white;
-		min-width:300px;
-		width:300px;
-
-		@media(max-width:375px){
-			width:100%;
-		}
+		width:100%;
 
 		//Validation
 		&.error:not(:valid) {
@@ -78,7 +106,7 @@ label {
 }
 
 span.error {
-	width:300px;
+	width:100%;
 	display:none;
 	color:$color-red;
 	margin-top:4px;
@@ -99,30 +127,75 @@ span.error {
 	}
 }
 
-form {
+header {
+	background-color:$color-black;
+	border-bottom:1px solid $color-blue;
+	text-align:right;
+	box-sizing:border-box;
+	padding:12px 4px 4px 4px;
+	margin-bottom:16px;
+
+	nav {
+		display:inline-block;
+
+		ul {
+			list-style:none;
+
+			& > li {
+				display:inline-block;
+				margin:0;
+			}
+		}
+	}
+}
+
+section {
 	display:inline-block;
 	border:1px solid $color-magenta;
 	box-sizing:border-box;
-	position:absolute;
-	top:50%;
-	left:50%;
-	transform:translate(-50%, -50%);
 	padding:48px;
 	background-color:$color-black;
+	position:relative;
+	width:calc(100% - 64px);
+	margin:32px;
 
-	h1 {
+	&.center {
+		position:absolute;
+		top:50%;
+		left:50%;
+		transform:translate(-50%, -50%);
+		width:50%;
+		min-width:300px;
+		max-width:500px;
+		margin:0;
+	}
+
+	h1, h2, h3 {
 		position:absolute;
 		top:-16px;
-
-		span {
-			background-color:$color-black;
-		}
+		background-color:$color-black;
 	}
 
 	@media(max-width:375px){
 		padding:24px;
 		margin-top:24px;
-		top:0;
-		transform:translate(-50%, 0);
+	}
+}
+
+table {
+	width:100%;
+
+	th {
+		font-weight:bold;
+	}
+
+	th, td {
+		border:1px solid $color-yellow;
+		padding:16px;
+		text-align:center;
+	}
+
+	tr:nth-child(even){
+		background-color:$color-dark-gray;
 	}
 }

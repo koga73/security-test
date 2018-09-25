@@ -20,8 +20,11 @@
 		</section>
 		<section>
 			<h2>Vulnerabilities &amp; Scoring</h2>
-			<p>Document where the vulnerability exists and how to exploit it</p>
-			<p>+2 points per vulnerability for how-to-fix recommendation</p>
+			<p>
+				Document where the vulnerability exists and how to exploit it
+				<br/>
+				+2 points per vulnerability for how-to-fix recommendation
+			</p>
 			<ul>
 				<li>SQLi <strong>1 Point</strong></li>
 				<li>XSS <strong>1 Point</strong></li>
@@ -34,8 +37,8 @@
 			</ul>
 		</section>
 		<section>
-			<h3>31337 HAck3rs</h3>
-			<p>Add your name here</p>
+			<h3>Add your name here</h3>
+			<ul></li>
 		</section>
 	</body>
 </html>

@@ -21,6 +21,13 @@
 			}
 			return false;
 		}
+
+		public static function getUser(){
+			if (!isset($_SESSION["user"])){
+				throw new Exception("user is not logged in");
+			}
+			return $_SESSION["user"];
+		}
 	}
 
 	//Check expired

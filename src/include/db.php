@@ -7,8 +7,9 @@
 		private static $DB_PASS = "";
 		private static $DB_NAME = "security_test";
 
-		private static $REGEX_USERNAME = "/^\\w{6,16}$/";
-		private static $REGEX_PASSWORD = "/^[\\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\\s]{7,32}$/";
+		private static $REGEX_USERNAME = "/^\w{6,16}$/";
+		private static $REGEX_PASSWORD = "/^[\w\s`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\'\"]{7,32}$/";
+		private static $REGEX_MESSAGE = "/^[\w\s`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}|\\'\"]{1,140}$/";
 
 		private function _connect(){
 			//DB Connection
@@ -30,7 +31,7 @@
 			$conn = $this->_connect();
 
 			try {
-				//Parameterized SQL to secure against SQLi
+				//Parameterized SQL to protect against SQLi
 				$stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
 				if (!$stmt){
 					throw new Exception("Statement invalid");
@@ -48,7 +49,6 @@
 			} finally {
 				$conn->close();
 			}
-			
 		}
 
 		public function login($username, $password){
@@ -61,7 +61,7 @@
 			$conn = $this->_connect();
 
 			try {
-				//Parameterized SQL to secure against SQLi
+				//Parameterized SQL to protect against SQLi
 				$stmt = $conn->prepare("SELECT id, username FROM users WHERE username=? AND password=?");
 				if (!$stmt){
 					throw new Exception("Statement invalid");
@@ -83,6 +83,61 @@
 				$stmt->close();
 
 				return new User($_id, $_username);
+			} catch (Exception $ex){
+				throw $ex;
+			} finally {
+				$conn->close();
+			}
+		}
+
+		public function insertMessage($user, $message){
+			if (!preg_match(DB::$REGEX_MESSAGE, $message)){
+				throw new Exception("message invalid");
+			}
+			$conn = $this->_connect();
+
+			try {
+				//Parameterized SQL to protect against SQLi
+				$stmt = $conn->prepare("INSERT INTO messages (user_id, content) VALUES (?, ?)");
+				if (!$stmt){
+					throw new Exception("Statement invalid");
+				}
+				$stmt->bind_param("ss", $user->id, $message);
+
+				//Vulnerability: XSS
+				//Fix: TODO
+				$stmt->execute();
+				$stmt->close();
+			} catch (Exception $ex){
+				throw $ex;
+			} finally {
+				$conn->close();
+			}
+		}
+
+		public function searchMessages($query = ""){
+			$conn = $this->_connect();
+
+			try {
+				//Vulnerability: SQLi
+				//Fix: Use parameterized SQL to protect against SQLi
+				$sql = "SELECT users.username, messages.content, messages.created FROM messages INNER JOIN users ON users.id=messages.user_id WHERE messages.content LIKE '%" . $query . "%'";
+				$result = $conn->query($sql);
+
+				//Don't do this!
+				$error = mysqli_error($conn);
+				if ($error){
+					throw new Exception($error);
+				}
+
+				$messages = [];
+				if ($result && $result->num_rows){
+					//Returning full data set, better to only return known fields!
+					while ($row = $result->fetch_assoc()){
+						array_push($messages, $row);
+					}
+				}
+				return $messages;
 			} catch (Exception $ex){
 				throw $ex;
 			} finally {
