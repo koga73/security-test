@@ -23,6 +23,13 @@ const config = {
 			output:dst + "include/recaptcha"
 		}
 	},
+	random_compat:{
+		name:"random_compat",
+		files:{
+			input:"random_compat-2.0.17/lib/**/*.php",
+			output:dst + "include/random_compat"
+		}
+	},
 	js:{
 		name:"js",
 		files:{
@@ -56,7 +63,7 @@ createTask("php", php, [config.php]);
 function copy(config){
 	gulp.src(config.files.input).pipe(gulp.dest(config.files.output));
 }
-createTask("copy", copy, [config.captcha, config.js]);
+createTask("copy", copy, [config.captcha, config.random_compat, config.js]);
 
 //sass
 function compileSass(config){
@@ -78,7 +85,7 @@ createTask("sass", compileSass, [config.sass]);
 function clean(config){
 	return del([config.files.output]);
 }
-createTask("clean", clean, [config.php, config.captcha, config.js, config.sass]);
+createTask("clean", clean, [config.php, config.captcha, config.random_compat, config.js, config.sass]);
 
 //build
 //build:php
@@ -91,6 +98,7 @@ function build(buildConfig){
 			php(buildConfig);
 			break;
 		case config.captcha.name:
+		case config.random_compat.name:
 		case config.js.name:
 			copy(buildConfig);
 			break;
@@ -99,7 +107,7 @@ function build(buildConfig){
 			break;
 	}
 }
-createTask("build", build, [config.php, config.captcha, config.js, config.sass]);
+createTask("build", build, [config.php, config.captcha, config.random_compat, config.js, config.sass]);
 
 //watch
 //watch:php

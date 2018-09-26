@@ -1,5 +1,6 @@
 <?php
 	require_once "include/models/user.php";
+	require_once "include/models/message.php";
 
 	class DB {
 		private static $DB_ADDRESS = "127.0.0.1";
@@ -121,7 +122,7 @@
 			try {
 				//Vulnerability: SQLi
 				//Fix: Use parameterized SQL to protect against SQLi
-				$sql = "SELECT users.username, messages.content, messages.created FROM messages INNER JOIN users ON users.id=messages.user_id WHERE messages.content LIKE '%" . $query . "%'";
+				$sql = "SELECT users.username, messages.content, messages.created FROM messages INNER JOIN users ON users.id=messages.user_id WHERE messages.content LIKE '%" . $query . "%' OR users.username='" . $query . "' ORDER BY messages.created DESC";
 				$result = $conn->query($sql);
 
 				//Don't do this!
@@ -132,9 +133,8 @@
 
 				$messages = [];
 				if ($result && $result->num_rows){
-					//Returning full data set, better to only return known fields!
 					while ($row = $result->fetch_assoc()){
-						array_push($messages, $row);
+						array_push($messages, new Message($row["username"], $row["content"], $row["created"]));
 					}
 				}
 				return $messages;

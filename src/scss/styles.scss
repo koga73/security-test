@@ -11,3 +11,43 @@
 	height:100%;
 	z-index:-1;
 }
+
+.messages {
+	list-style:none;
+
+	& > li {
+		margin:16px 0;
+		border:2px solid $color-yellow;
+		box-sizing:border-box;
+		padding:16px;
+		border-radius:16px;
+		position:relative;
+		float:left;
+		clear:both;
+		min-width:200px;
+
+		&.self {
+			border-color:$color-green;
+			float:right;
+			text-align:right;
+
+			.user {
+				left:auto;
+				right:16px;
+			}
+		}
+
+		.user {
+			position:absolute;
+			top:-8px;
+			left:16px;
+			background-color:$color-black;
+		}
+
+		.created {
+			display:block;
+			font-size:toEm(12);
+			display:none;
+		}
+	}
+}
