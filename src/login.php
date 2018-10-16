@@ -2,10 +2,10 @@
 	require_once "include/models/session.php";
 	require_once "include/db.php";
 
-	const LOGIN_REDIRECT = "messages.php";
+	const POST_REDIRECT = "messages.php";
 
 	if (Session::isLoggedIn()){
-		header("Location: " . LOGIN_REDIRECT);
+		header("Location: " . POST_REDIRECT);
 		exit();
 	}
 
@@ -19,8 +19,7 @@
 			throw new Exception("txtPass required");
 		}
 
-		$user = (new DB())->login($txtUser, $txtPass);
-
+		$user = DB::login($txtUser, $txtPass);
 		Session::login($user);
 	}
 
@@ -28,7 +27,7 @@
 	if (!empty($_POST)){
 		try {
 			login();
-			header("Location: " . LOGIN_REDIRECT);
+			header("Location: " . POST_REDIRECT);
 			exit();
 		} catch (Exception $ex){
 			$error = $ex->getMessage();
@@ -59,7 +58,7 @@
 				</div>
 				<button type="submit" v-bind:disabled="submitted || incomplete">Login</button>
 				<?php if ($error): ?>
-					<span class="error server-error"><?php echo $error ?></span>
+					<span class="error server-error"><?php echo htmlspecialchars($error) ?></span>
 				<?php endif; ?>
 			</form>
 		</section>

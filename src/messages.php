@@ -2,6 +2,8 @@
 	require_once "include/models/session.php";
 	require_once "include/db.php";
 	
+	const POST_REDIRECT = "messages.php";
+
 	if (!Session::isLoggedIn()){
 		header("Location: login.php");
 		exit();
@@ -20,7 +22,7 @@
 		}
 
 		$user = Session::getUser();
-		(new DB())->insertMessage($user, $txtMessage);
+		DB::insertMessage($user, $txtMessage);
 	}
 
 	$error = null;
@@ -28,8 +30,10 @@
 	try {
 		if (!empty($_POST)){
 			postMessage();
+			header("Location: " . POST_REDIRECT);
+			exit();
 		}
-		$messages = ((new DB())->searchMessages());
+		$messages = DB::searchMessages();
 	} catch (Exception $ex){
 		$error = $ex->getMessage();
 	}
@@ -54,9 +58,9 @@
 				</div>
 				<button type="submit" v-bind:disabled="submitted || incomplete">Post</button>
 				<?php if ($error): ?>
-					<span class="error server-error"><?php echo $error ?></span>
+					<span class="error server-error"><?php echo htmlspecialchars($error) ?></span>
 				<?php endif; ?>
-				<input type="hidden" name="nonce" value="<?php echo $nonce; ?>"/>
+				<input type="hidden" name="nonce" value="<?php echo htmlspecialchars($nonce) ?>"/>
 			</form>
 		</section>
 		<section>
@@ -64,9 +68,14 @@
 			<ol class="messages">
 				<?php foreach($messages as &$message): ?>
 					<li class="<?php echo ($message->username == $user->username) ? 'self' : ''; ?>">
-						<span class="user"><?php echo $message->username ?></span>
+						<span class="user"><?php echo htmlspecialchars($message->username) ?></span>
+/* @if SECURE */
+						<span class="content"><?php echo htmlspecialchars($message->content) ?></span>
+/* @endif */
+/* @if !SECURE */
 						<span class="content"><?php echo $message->content ?></span>
-						<span class="created"><?php echo $message->created ?></span>
+/* @endif */
+						<span class="created"><?php echo htmlspecialchars($message->created) ?></span>
 					</li>
 				<?php endforeach; ?>
 			</ol>

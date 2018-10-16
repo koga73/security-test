@@ -8,6 +8,12 @@ const createTask = require('./gulp/create-task');
 const src = "src/";
 const dst = "www/";
 
+const PREPROCESS_VARS = {
+	SECURE:true,
+	HIDDEN_COMMENTS:true,
+	USE_CAPTCHA:false
+};
+
 const config = {
 	php:{
 		name:"php",
@@ -51,9 +57,7 @@ function php(config){
 	gulp
 		.src(config.files.input)
 		.pipe(preprocess({
-			context:{
-				INSECURE:false
-			}
+			context:PREPROCESS_VARS
 		}))
 		.pipe(gulp.dest(config.files.output));
 }

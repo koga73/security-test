@@ -2,7 +2,14 @@
 	require_once "include/models/session.php";
 	require_once "include/db.php";
 
+	const POST_REDIRECT = "login.php";
+	
+/* @if USE_CAPTCHA */
 	const USE_CAPTCHA = true;
+/* @endif */
+/* @if !USE_CAPTCHA */
+	const USE_CAPTCHA = false;
+/* @endif */
 	const RECAPTCHA_SECRET = "6Lf6yW8UAAAAAD1EWi-l4utA6jyV7Rlr5Gc2WJ37";
 	
 	require_once "include/recaptcha/autoload.php";
@@ -29,7 +36,7 @@
 			}
 		}
 
-		(new DB())->insertUser($txtUser, $txtPass);
+		DB::insertUser($txtUser, $txtPass);
 	}
 
 	function getUserIP() {
@@ -57,7 +64,7 @@
 	if (!empty($_POST)){
 		try {
 			register($recaptcha);
-			header("Location: login.php");
+			header("Location: " . POST_REDIRECT);
 			exit();
 		} catch (Exception $ex){
 			$error = $ex->getMessage();
@@ -100,7 +107,7 @@
 				<?php endif; ?>
 				<button type="submit" v-bind:disabled="submitted || incomplete">Register</button>
 				<?php if ($error): ?>
-					<span class="error server-error"><?php echo $error ?></span>
+					<span class="error server-error"><?php echo htmlspecialchars($error) ?></span>
 				<?php endif; ?>
 			</form>
 		</section>
