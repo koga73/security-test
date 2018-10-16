@@ -73,6 +73,10 @@
 						<span class="content"><?php echo htmlspecialchars($message->content) ?></span>
 /* @endif */
 /* @if !SECURE */
+	/* @if !HIDDEN_COMMENTS */
+						<!-- Vulnerability: XSS -->
+						<!-- Fix: Encode output via htmlspecialchars -->
+	/* @endif */
 						<span class="content"><?php echo $message->content ?></span>
 /* @endif */
 						<span class="created"><?php echo htmlspecialchars($message->created) ?></span>
