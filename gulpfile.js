@@ -11,7 +11,7 @@ const dst = "www/";
 const PREPROCESS_VARS = {
 	SECURE:true,
 	HIDDEN_COMMENTS:true,
-	USE_CAPTCHA:true
+	USE_CAPTCHA:false
 };
 
 const config = {

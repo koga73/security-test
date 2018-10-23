@@ -127,17 +127,43 @@
 			$conn = DB::_connect();
 
 			try {
+/* @if SECURE */
+				//Parameterized SQL to protect against SQLi
+				$stmt = $conn->prepare("SELECT users.username, messages.content, messages.created FROM messages INNER JOIN users ON users.id=messages.user_id WHERE messages.content LIKE ? OR users.username=? ORDER BY messages.created DESC");
+				if (!$stmt){
+					throw new Exception("Statement invalid");
+				}
+				$likeQuery = '%' . $query . '%';
+				$stmt->bind_param("ss", $likeQuery, $query);
+				$stmt->execute();
+				$stmt->store_result();
+				$stmt->bind_result($_username, $_content, $_created);
+				
+				$messages = [];
+				while ($stmt->fetch()){
+					array_push($messages, new Message($_username, $_content, $_created));
+				}
+				
+				$stmt->close();
+
+				return $messages;
+/* @endif */
+/* @if !SECURE */
+	/* @if !HIDDEN_COMMENTS */
 				//Vulnerability: SQLi
 				//Fix: Use parameterized SQL to protect against SQLi
+	/* @endif */
 				$sql = "SELECT users.username, messages.content, messages.created FROM messages INNER JOIN users ON users.id=messages.user_id WHERE messages.content LIKE '%" . $query . "%' OR users.username='" . $query . "' ORDER BY messages.created DESC";
 				$result = $conn->query($sql);
-
-				//Don't do this!
+				
+	/* @if !HIDDEN_COMMENTS */
+				//Vulnerability: Verbose error logging allows attacker to fine-tune their SQLi
+				//Fix: Don't give detailed information about the error
+	/* @endif */
 				$error = mysqli_error($conn);
 				if ($error){
 					throw new Exception($error);
 				}
-
 				$messages = [];
 				if ($result && $result->num_rows){
 					while ($row = $result->fetch_assoc()){
@@ -145,6 +171,7 @@
 					}
 				}
 				return $messages;
+/* @endif */
 			} catch (Exception $ex){
 				throw $ex;
 			} finally {

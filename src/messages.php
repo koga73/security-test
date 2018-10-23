@@ -11,10 +11,18 @@
 	$user = Session::getUser();
 
 	function postMessage(){
+/* @if SECURE */
 		$nonce = (isset($_POST["nonce"])) ? $_POST["nonce"] : null;
 		if (!Session::verifyNonce($nonce)){
-			//throw new Exception("nonce invalid");
+			throw new Exception("nonce invalid");
 		}
+/* @endif */
+/* @if !SECURE */
+	/* @if !HIDDEN_COMMENTS */
+		//Vulnerability: CSRF -->
+		//Fix: Use nonce to verify request and ideally check host domain -->
+	/* @endif */
+/* @endif */
 		
 		$txtMessage = (isset($_POST["txtMessage"])) ? $_POST["txtMessage"] : null;
 		if (!$txtMessage){

@@ -10,6 +10,11 @@
 	}
 
 	function login(){
+		$nonce = (isset($_POST["nonce"])) ? $_POST["nonce"] : null;
+		if (!Session::verifyNonce($nonce)){
+			throw new Exception("nonce invalid");
+		}
+
 		$txtUser = (isset($_POST["txtUser"])) ? $_POST["txtUser"] : null;
 		if (!$txtUser){
 			throw new Exception("txtUser required");
@@ -33,6 +38,7 @@
 			$error = $ex->getMessage();
 		}
 	}
+	$nonce = Session::generateNonce();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,6 +66,7 @@
 				<?php if ($error): ?>
 					<span class="error server-error"><?php echo htmlspecialchars($error) ?></span>
 				<?php endif; ?>
+				<input type="hidden" name="nonce" value="<?php echo htmlspecialchars($nonce) ?>"/>
 			</form>
 		</section>
 		
