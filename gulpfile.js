@@ -9,7 +9,7 @@ const src = "src/";
 const dst = "www/";
 
 const PREPROCESS_VARS = {
-	SECURE:true,
+	SECURE:false,
 	HIDDEN_COMMENTS:true,
 	USE_CAPTCHA:false
 };

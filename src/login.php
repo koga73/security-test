@@ -39,6 +39,11 @@
 		}
 	}
 	$nonce = Session::generateNonce();
+
+	$utm_campaign = (isset($_GET["utm_campaign"])) ? $_GET["utm_campaign"] : null;
+	if ($utm_campaign){
+		setcookie("utm_campaign", $utm_campaign, 0, '/; samesite=strict', "", false, false);
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
