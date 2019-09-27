@@ -1,3 +1,27 @@
+.clr {
+	clear: both;
+
+	&:before,
+	&:after {
+		content: "";
+		display: table;
+	}
+
+	&:after {
+		clear: both;
+	}
+}
+
+.seo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	font-size: 0;
+}
+
 body {
 	background-color:$color-black;
 	color:$color-white;
@@ -7,6 +31,10 @@ body {
 h1, h2, h3 {
 	font-size:2em;
 	text-transform:uppercase;
+	font-weight:bold;
+}
+
+strong {
 	font-weight:bold;
 }
 
@@ -39,7 +67,7 @@ button {
 
 ul, ol {
 	list-style:square outside;
-	
+
 	& > li {
 		margin:8px 0 8px 32px;
 	}
@@ -52,6 +80,7 @@ p {
 
 a {
 	color:$color-blue;
+	background-color:$color-black;
 	text-decoration:none;
 	text-transform:uppercase;
 	border-bottom:1px solid transparent;
@@ -61,8 +90,8 @@ a {
 	margin:12px 8px;
 
 	&:hover {
-		color:$color-yellow;
-		border-bottom:1px solid $color-red;
+		color:$color-white;
+		border-bottom:1px solid $color-white;
 	}
 
 	@media(max-width:375px){
@@ -91,7 +120,7 @@ label {
 		//Validation
 		&.error:not(:valid) {
 			border:1px solid $color-red;
-	
+
 			& ~ .error {
 				display:block;
 			}
@@ -128,12 +157,31 @@ span.error {
 }
 
 header {
-	background-color:$color-black;
-	border-bottom:1px solid $color-blue;
 	text-align:right;
 	box-sizing:border-box;
 	padding:12px 4px 4px 4px;
 	margin-bottom:16px;
+
+	#logo {
+		width:100px;
+		float:left;
+		margin:8px;
+		background-color:$color-black;
+
+		@media(max-width:767px){
+			width:50px;
+		}
+
+		a {
+			display:block;
+			margin:0;
+			padding:0;
+
+			&:hover {
+				border-color:transparent;
+			}
+		}
+	}
 
 	nav {
 		display:inline-block;

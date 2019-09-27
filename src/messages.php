@@ -1,11 +1,11 @@
 <?php
 	require_once "include/models/session.php";
 	require_once "include/db.php";
-	
+
 	const POST_REDIRECT = "messages.php";
 
 	if (!Session::isLoggedIn()){
-		header("Location: login.php");
+		header("Location: " . Session::appendToUrl("login.php"));
 		exit();
 	}
 	$user = Session::getUser();
@@ -23,7 +23,7 @@
 		//Fix: Use nonce to verify request and ideally check host domain -->
 	/* @endif */
 /* @endif */
-		
+
 		$txtMessage = (isset($_POST["txtMessage"])) ? $_POST["txtMessage"] : null;
 		if (!$txtMessage){
 			throw new Exception("txtMessage required");
@@ -38,7 +38,7 @@
 	try {
 		if (!empty($_POST)){
 			postMessage();
-			header("Location: " . POST_REDIRECT);
+			header("Location: " . Session::appendToUrl(POST_REDIRECT));
 			exit();
 		}
 		$messages = DB::searchMessages();
@@ -51,14 +51,14 @@
 <html lang="en">
 	<head>
 		<title>Message board</title>
-		
+
 		<?php include "partials/_head.php"; ?>
 	</head>
 	<body>
 	<?php include "partials/_header.php"; ?>
 		<section>
 			<h1>Post a message</h1>
-			<form id="frmMessages" ref="form" method="POST" v-on:submit="handler_form_submit" v-cloak>
+			<form id="frmMessages" ref="form" method="POST" action="<?php echo Session::appendToUrl('') ?>" v-on:submit="handler_form_submit" v-cloak>
 				<div class="input-wrap">
 					<label for="txtMessage">Message:</label>
 					<input type="text" id="txtMessage" name="txtMessage" autocomplete="off" ref="txtMessage" v-model="model.message" required minlength="1" maxlength="140" pattern="[\w`~!@#$%^&*()-=+,<\.>\/?;:\[{\]}'|\\\s]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
@@ -92,11 +92,11 @@
 				<?php endforeach; ?>
 			</ol>
 		</section>
-		
+
 		<canvas id="fusionCanvas"></canvas>
 		<script src="js/_lib/GFXRenderer.min.js"></script>
 		<script src="js/FusionRenderer.js"></script>
-		
+
 		<script src="js/_lib/vue.min.js"></script>
 		<script src="js/messages.js"></script>
 	</body>

@@ -3,6 +3,7 @@
 
 	Session::logout();
 
-	header('Location: login.php');
+	//No need to append session since it is being cleared
+	header("Location: login.php");
 	exit();
 ?>

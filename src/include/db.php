@@ -48,7 +48,9 @@
 	/* @endif */
 				$password = sha1($password);
 /* @endif */
-				$stmt->execute();
+				if (!$stmt->execute()){
+					throw new Exception("User already exists");
+				}
 				$stmt->close();
 			} catch (Exception $ex){
 				throw $ex;
@@ -138,12 +140,12 @@
 				$stmt->execute();
 				$stmt->store_result();
 				$stmt->bind_result($_username, $_content, $_created);
-				
+
 				$messages = [];
 				while ($stmt->fetch()){
 					array_push($messages, new Message($_username, $_content, $_created));
 				}
-				
+
 				$stmt->close();
 
 				return $messages;
@@ -155,7 +157,7 @@
 	/* @endif */
 				$sql = "SELECT users.username, messages.content, messages.created FROM messages INNER JOIN users ON users.id=messages.user_id WHERE messages.content LIKE '%" . $query . "%' OR users.username='" . $query . "' ORDER BY messages.created DESC";
 				$result = $conn->query($sql);
-				
+
 	/* @if !HIDDEN_COMMENTS */
 				//Vulnerability: Verbose error logging allows attacker to fine-tune their SQLi
 				//Fix: Don't give detailed information about the error

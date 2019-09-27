@@ -1,7 +1,7 @@
 <?php
 	require_once "include/models/session.php";
 	require_once "include/db.php";
-	
+
 	$error = null;
 	$messages = [];
 	try {
@@ -15,13 +15,13 @@
 <html lang="en">
 	<head>
 		<title>Message board</title>
-		
+
 		<?php include "partials/_head.php"; ?>
 	</head>
 	<body>
 		<?php include "partials/_header.php"; ?>
 		<section>
-			<form method="GET">
+			<form method="GET" action="<?php echo Session::appendToUrl('') ?>">
 				<h1>Search</h1>
 				<div class="input-wrap">
 					<label for="txtSearch">Search:</label>
@@ -52,7 +52,7 @@
 				</table>
 			<?php endif; ?>
 		</section>
-		
+
 		<canvas id="fusionCanvas"></canvas>
 		<script src="js/_lib/GFXRenderer.min.js"></script>
 		<script src="js/FusionRenderer.js"></script>

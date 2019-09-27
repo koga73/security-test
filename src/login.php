@@ -5,7 +5,7 @@
 	const POST_REDIRECT = "messages.php";
 
 	if (Session::isLoggedIn()){
-		header("Location: " . POST_REDIRECT);
+		header("Location: " . Session::appendToUrl(POST_REDIRECT));
 		exit();
 	}
 
@@ -32,7 +32,7 @@
 	if (!empty($_POST)){
 		try {
 			login();
-			header("Location: " . POST_REDIRECT);
+			header("Location: " . Session::appendToUrl(POST_REDIRECT));
 			exit();
 		} catch (Exception $ex){
 			$error = $ex->getMessage();
@@ -49,14 +49,14 @@
 <html lang="en">
 	<head>
 		<title>Login</title>
-		
+
 		<?php include "partials/_head.php"; ?>
 	</head>
 	<body>
 		<?php include "partials/_header.php"; ?>
 		<section class="center">
 			<h1>Login</h1>
-			<form id="frmLogin" ref="form" method="POST" v-on:submit="handler_form_submit" v-cloak>
+			<form id="frmLogin" ref="form" method="POST" action="<?php echo Session::appendToUrl('') ?>" v-on:submit="handler_form_submit" v-cloak>
 				<div class="input-wrap">
 					<label for="txtUser">Username:</label>
 					<input type="text" id="txtUser" name="txtUser" autocomplete="off" ref="txtUser" v-model="model.user" required minlength="6" maxlength="16" pattern="[\w]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
@@ -74,7 +74,7 @@
 				<input type="hidden" name="nonce" value="<?php echo htmlspecialchars($nonce) ?>"/>
 			</form>
 		</section>
-		
+
 		<canvas id="fusionCanvas"></canvas>
 		<script src="js/_lib/GFXRenderer.min.js"></script>
 		<script src="js/FusionRenderer.js"></script>

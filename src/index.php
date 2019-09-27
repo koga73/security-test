@@ -5,7 +5,7 @@
 <html lang="en">
 	<head>
 		<title>Rules</title>
-		
+
 		<?php include "partials/_head.php"; ?>
 	</head>
 	<body>
@@ -13,9 +13,9 @@
 		<section>
 			<h1>Rules</h1>
 			<ol>
-				<li>Don't destroy anything</li>
-				<li>Don't mess with others</li>
-				<li>Don't fix vulnerabilities</li>
+				<li><strong>Don't destroy anything</strong> (drop tables / delete files)</li>
+				<li><strong>Don't mess with others</strong> (annoying alerts, DoS)</li>
+				<li><strong>Don't fix vulnerabilities</strong></li>
 			</ol>
 		</section>
 		<section>
@@ -23,22 +23,23 @@
 			<p>
 				Document where the vulnerability exists and how to exploit it
 				<br/>
-				+2 points per vulnerability for how-to-fix recommendation
+				<strong>+2 points</strong> per vulnerability for accurate how-to-fix recommendation
 			</p>
 			<ul>
-				<li>SQLi <strong>1 Point</strong></li>
-				<li>XSS <strong>1 Point</strong></li>
-				<li>CSRF <strong>2 Points</strong></li>
-				<li>Response splitting <strong>3 Points</strong></li>
-				<li>Password cracking <strong>4 Points</strong></li>
-				<li>Session Hijacking <strong>4 Points</strong></li>
-				<li>Homepage defacement (Add your name below) <strong>5 Points</strong></li>
-				<li>TLS Private Key obtained <strong>10 Points</strong></li>
+				<li class="easy">XSS - console.log your name <strong>1 Point</strong></li>
+				<li class="easy">CSRF <strong>2 Points</strong></li>
+				<li class="easy">Session fixation <strong>2 Points</strong></li>
+				<li class="medium">SQLi - obtain password hashes <strong>3 Points</strong></li>
+				<li class="medium">Password cracking <strong>4 Points</strong></li>
+				<li class="hard">Homepage defacement (Add your name below) <strong>5 Points</strong></li>
+				<li class="hard">TLS Private Key obtained <strong>10 Points</strong></li>
 			</ul>
 		</section>
 		<section>
 			<h3>Add your name here</h3>
-			<ul></li>
+			<ul>
+				<li>No names yet</li>
+			</li>
 		</section>
 	</body>
 </html>

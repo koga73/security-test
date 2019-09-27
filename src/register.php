@@ -3,7 +3,7 @@
 	require_once "include/db.php";
 
 	const POST_REDIRECT = "login.php";
-	
+
 /* @if USE_CAPTCHA */
 	const USE_CAPTCHA = true;
 /* @endif */
@@ -11,7 +11,7 @@
 	const USE_CAPTCHA = false;
 /* @endif */
 	const RECAPTCHA_SECRET = "6Lf6yW8UAAAAAD1EWi-l4utA6jyV7Rlr5Gc2WJ37";
-	
+
 	require_once "include/recaptcha/autoload.php";
 	$recaptcha = new \ReCaptcha\ReCaptcha(RECAPTCHA_SECRET);
 
@@ -69,7 +69,7 @@
 	if (!empty($_POST)){
 		try {
 			register($recaptcha);
-			header("Location: " . POST_REDIRECT);
+			header("Location: " . Session::appendToUrl(POST_REDIRECT));
 			exit();
 		} catch (Exception $ex){
 			$error = $ex->getMessage();
@@ -81,16 +81,16 @@
 <html lang="en">
 	<head>
 		<title>Register</title>
-		
+
 		<?php include "partials/_head.php"; ?>
-		
+
 		<?php if (USE_CAPTCHA) echo '<script src="https://www.google.com/recaptcha/api.js"></script>' ?>
 	</head>
 	<body>
 		<?php include "partials/_header.php"; ?>
 		<section class="center">
 			<h1>Register</h1>
-			<form id="frmRegister" ref="form" method="POST" v-on:submit="handler_form_submit" v-cloak>
+			<form id="frmRegister" ref="form" method="POST" action="<?php echo Session::appendToUrl('') ?>" v-on:submit="handler_form_submit" v-cloak>
 				<div class="input-wrap">
 					<label for="txtUser">Username:</label>
 					<input type="text" id="txtUser" name="txtUser" autocomplete="off" ref="txtUser" v-model="model.user" required minlength="6" maxlength="16" pattern="[\w]+" v-on:invalid="handler_input_invalid" v-on:blur="handler_input_blur" v-bind:disabled="submitted"/>
@@ -122,7 +122,7 @@
 		<canvas id="fusionCanvas"></canvas>
 		<script src="js/_lib/GFXRenderer.min.js"></script>
 		<script src="js/FusionRenderer.js"></script>
-		
+
 		<script src="js/_lib/vue.min.js"></script>
 		<script src="js/register.js"></script>
 	</body>
