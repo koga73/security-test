@@ -11,7 +11,7 @@ const dst = "www/";
 const PREPROCESS_VARS = {
 	SECURE:false,
 	HIDDEN_COMMENTS:true,
-	USE_CAPTCHA:false
+	USE_CAPTCHA:false,
 };
 
 const config = {
@@ -49,15 +49,23 @@ const config = {
 			input:src + "scss/*.scss",
 			output:dst + "css/"
 		}
+	},
+	htaccess:{
+		name:"htaccess",
+		files:{
+			input:src + ".htaccess",
+			output:dst
+		}
 	}
 };
 
-//php
+//php/htaccess
 function php(config){
 	gulp
 		.src(config.files.input)
 		.pipe(preprocess({
-			context:PREPROCESS_VARS
+			context:PREPROCESS_VARS,
+			extension:"php" //Needed to use php comments in .htaccess
 		}))
 		.pipe(gulp.dest(config.files.output));
 }
@@ -86,19 +94,22 @@ createTask("sass", compileSass, [config.sass]);
 //clean:captcha
 //clean:js
 //clean:sass
+//clean:htaccess
 function clean(config){
 	return del([config.files.output]);
 }
-createTask("clean", clean, [config.php, config.captcha, config.random_compat, config.js, config.sass]);
+createTask("clean", clean, [config.php, config.captcha, config.random_compat, config.js, config.sass, config.htaccess]);
 
 //build
 //build:php
 //build:captcha
 //build:js
 //build:sass
+//build:htaccess
 function build(buildConfig){
 	switch (buildConfig.name){
 		case config.php.name:
+		case config.htaccess.name:
 			php(buildConfig);
 			break;
 		case config.captcha.name:
@@ -111,15 +122,16 @@ function build(buildConfig){
 			break;
 	}
 }
-createTask("build", build, [config.php, config.captcha, config.random_compat, config.js, config.sass]);
+createTask("build", build, [config.php, config.captcha, config.random_compat, config.js, config.sass, config.htaccess]);
 
 //watch
 //watch:php
 //watch:js
 //watch:sass
+//watch:htaccess
 function watch(config){
 	return gulp.watch(config.files.input, ["build:" + config.name]);
 }
-createTask("watch", watch, [config.php, config.js, config.sass]);
+createTask("watch", watch, [config.php, config.js, config.sass, config.htaccess]);
 
 gulp.task("default", ["build"]);
