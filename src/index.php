@@ -32,8 +32,10 @@
 				<li class="medium">SQLi - obtain password hashes <strong>3 Points</strong></li>
 				<li class="medium">Password cracking <strong>4 Points</strong></li>
 				<li class="hard">Homepage defacement (Add your name below) <strong>5 Points</strong></li>
-				<li class="hard">TLS Private Key obtained <strong>10 Points</strong></li>
+				<li class="hard">TLS Private Key obtained <strong>6 Points</strong></li>
+				<li class="hard">Root access <strong>7 Points</strong></li>
 			</ul>
+			<p>Find anything else?</p>
 		</section>
 		<section>
 			<h3>Add your name here</h3>

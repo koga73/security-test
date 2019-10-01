@@ -7,10 +7,12 @@ RewriteEngine On
 	ServerSignature Off
 	Header always unset "Server"
 	Header unset "Server"
+	Header always unset "X-Powered-By"
+	Header unset "X-Powered-By"
 
 	header always set x-frame-options "SAMEORIGIN"
 	Header always set Content-Security-Policy "upgrade-insecure-requests; default-src https:"
 	Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
 /* @endif */
 
-ErrorDocument 404 404.php
+ErrorDocument 404 /404.php

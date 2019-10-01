@@ -33,6 +33,15 @@ sudo setsebool -P httpd_can_network_connect 1
 sudo setsebool -P allow_ftpd_full_access 1
 ```
 
+### Install vsftpd 2.3.4 containing well-known vulnerability
+1. [Download vsftpd 2.3.4](https://github.com/dagwieers/vsftpd/archive/2.3.4.tar.gz)
+2. Extract and replace files with those found in this repo */documents/vsftpd_2-3-4_vulnerable-files/*
+3. Follow instructions to compile and install vsftpd - https://github.com/dagwieers/vsftpd/blob/master/INSTALL
+4. Allow port 6200 which is used by backdoor
+```firewall-cmd --permanent --add-port=6200/tcp```
+
+You will need to download 2.3.4, compile and install from source
+
 ## WHOIS
 Use the WHOIS record to give some hints - this will reward users who perform recon
 
@@ -75,6 +84,8 @@ Gmail password: Waffles1
 
 6. Password cracking - Now that you have the password hash observe that it is a SHA-1 hash due to length. Use a password cracking tool and wordlist to crack the hash
 
-7. Homepage defacement - This requires FTP on server. Assume that the password hash you previously cracked is the same as FTP credentials, login and use FTP to update the homepage. Additionally you could use vsftpd 2.3.4 which has an exploit to gain access
+7. Homepage defacement - Requires FTP on server. Assume that the password hash you previously cracked is the same as FTP credentials, login and use FTP to update the homepage. Additionally you could use vsftpd 2.3.4 which has an exploit to gain access
 
-8. TLS Private Key obtained - This requires server. Either use FTP directory traversal to download the key, heartbleed to obtain the key from memory, or anther exploit to gain server access
+8. TLS Private Key obtained - Requires FTP on server with no chroot. Use FTP directory traversal due to lack of chroot jail to grab key from /etc/ssl
+
+9. Root access - Requires FTP on server with vsftpd 2.3.4. Use metasploit to gain access via ftp port
